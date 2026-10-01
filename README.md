@@ -42,15 +42,10 @@ The system is built around the Cyber Security Act 2026 (Act No. 81 of 2026, Bang
 
 ## Team
 
-| ID | Name | Requirements |
-| --- | --- | --- |
-| 232-35-541 | Md. Abu Shahriar Sabbir | FR1, FR2, FR6, FR11 |
-| 232-35-136 | Jarif Hossain | FR3, FR7, FR8, FR9 |
-| 232-35-329 | Sabbir Ahmed | FR4, FR5, FR10, FR12 |
+Md. Abu Shahriar Sabbir 
+Jarif Hossain
+Sabbir Ahmed 
 
-Group 05, Lab Section B1.
-
----
 
 ## Requirements and progress
 
@@ -133,21 +128,6 @@ php artisan serve
 ```
 
 Open `http://127.0.0.1:8000`.
-
----
-
-## Test accounts
-
-Created by the seeder. All use the password `password`.
-
-| Email | Role | Can do |
-| --- | --- | --- |
-| admin@dfems.test | Admin | Everything |
-| supervisor@dfems.test | Supervisor | View cases, assign staff, approve transfers |
-| officer@dfems.test | Investigating Officer | Create and edit cases, register evidence |
-| analyst@dfems.test | Forensic Analyst | Examine evidence, verify integrity |
-| custody@dfems.test | Custody Officer | Hold and transfer exhibits |
-| prosecutor@dfems.test | Prosecutor | Read only, plus reports |
 
 ---
 
