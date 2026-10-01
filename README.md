@@ -42,8 +42,8 @@ The system is built around the Cyber Security Act 2026 (Act No. 81 of 2026, Bang
 
 ## Team
 
-Md. Abu Shahriar Sabbir 
-Jarif Hossain
+Md. Abu Shahriar Sabbir,  
+Jarif Hossain, 
 Sabbir Ahmed 
 
 
