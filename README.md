@@ -56,7 +56,7 @@ Sabbir Ahmed
 | FR1 | Case creation and management | Md. Abu Shahriar Sabbir | Done |
 | FR2 | Evidence registration with seizure metadata | Md. Abu Shahriar Sabbir | Done |
 | FR3 | Automatic SHA-256 hash at intake | Jarif Hossain | In progress |
-| FR4 | Case and evidence search with filtering | Sabbir Ahmed | In progress |
+| FR4 | Case and evidence search with filtering | Sabbir Ahmed | Done |
 
 ### Module 2: Chain of Custody & Integrity Assurance
 
