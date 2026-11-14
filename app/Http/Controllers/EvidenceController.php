@@ -48,7 +48,12 @@ class EvidenceController extends Controller
                 // Stored privately under storage/app/evidence,
                 // never in the public folder.
                 $data['file_path'] = $file->store('evidence', 'local');
+                // FR3: Generate SHA-256 hash of the stored evidence file
+                $path = Storage::disk('local')->path($data['file_path']);
 
+                $data['sha256_hash'] = hash_file('sha256', $path);
+                $data['hash_algorithm'] = 'sha256';
+                $data['hashed_at'] = now();
                 /* ------------------------------------------------------------
                  | FR3 BELONGS HERE. Jarif Hossain.
                  |
