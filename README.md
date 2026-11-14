@@ -60,8 +60,8 @@ Group 05, Lab Section B1.
 | --- | --- | --- | --- |
 | FR1 | Case creation and management | Md. Abu Shahriar Sabbir | Done |
 | FR2 | Evidence registration with seizure metadata | Md. Abu Shahriar Sabbir | Done |
-| FR3 | Automatic SHA-256 hash at intake | Jarif Hossain | In progress |
-| FR4 | Case and evidence search with filtering | Sabbir Ahmed | In progress |
+| FR3 | Automatic SHA-256 hash at intake | Jarif Hossain | Done |
+| FR4 | Case and evidence search with filtering | Sabbir Ahmed | Done |
 
 ### Module 2: Chain of Custody & Integrity Assurance
 
@@ -98,80 +98,9 @@ Authentication, role enforcement, notifications and the dashboard are supporting
 Requires PHP 8.3 or higher, Composer 2, Node 18 or higher and MySQL 8. Laragon Full provides all of them.
 
 ```bash
-git clone https://github.com/shahriarsabbirswe/forensic-evidence-system.git
+git clone [https://github.com/shahriarsabbirswe/forensic-evidence-system.git](https://github.com/shahriarsabbirswe/forensic-evidence-system.git)
 cd forensic-evidence-system
 git checkout module-1-evidence-intake
 composer install
 cp .env.example .env
 php artisan key:generate
-```
-
-Set the database section of `.env`:
-
-```
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=forensic_evidence
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-Then:
-
-```bash
-mysql -u root -e "CREATE DATABASE forensic_evidence;"
-php artisan migrate --seed
-npm install
-npm run dev
-```
-
-In a second terminal:
-
-```bash
-php artisan serve
-```
-
-Open `http://127.0.0.1:8000`.
-
----
-
-## Test accounts
-
-Created by the seeder. All use the password `password`.
-
-| Email | Role | Can do |
-| --- | --- | --- |
-| admin@dfems.test | Admin | Everything |
-| supervisor@dfems.test | Supervisor | View cases, assign staff, approve transfers |
-| officer@dfems.test | Investigating Officer | Create and edit cases, register evidence |
-| analyst@dfems.test | Forensic Analyst | Examine evidence, verify integrity |
-| custody@dfems.test | Custody Officer | Hold and transfer exhibits |
-| prosecutor@dfems.test | Prosecutor | Read only, plus reports |
-
----
-
-## Design decisions worth knowing
-
-**Nothing can be deleted.** There is no delete route for a case or for evidence anywhere in the system. Cases are closed or archived through their status field. Evidence is disposed of through FR12, with approval, and the disposal is recorded permanently. Evidence that can vanish defeats the purpose of the system.
-
-**The hash is written in the same transaction as the record.** If an evidence record saved but its hash did not, that item would have no baseline and could never be verified again. Both happen together or neither does.
-
-**The edit form cannot reach the file, the hash or the evidence number.** `UpdateEvidenceRequest` has no validation rules for those fields, so even a crafted request cannot change them.
-
-**The model is named `InvestigationCase`, not `Case`.** `case` is a reserved word in PHP.
-
-**The database table is `evidence`, not `evidences`.** The model sets `protected $table = 'evidence';` to make this explicit.
-
-**Time zone is set explicitly to Asia/Dhaka** in `config/app.php`, and each evidence record also stores the time zone of its acquisition separately. In a forensic context a timestamp without a zone is not a timestamp.
-
----
-
-## Branches
-
-| Branch | Purpose |
-| --- | --- |
-| `main` | Reviewed and approved work |
-| `module-1-evidence-intake` | Current development |
-
-Each module is developed on its own branch and merged into `main` once complete and reviewed.
