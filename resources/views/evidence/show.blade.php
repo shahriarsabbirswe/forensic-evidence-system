@@ -146,7 +146,7 @@
                     </div>
                 </dl>
             </div>
-
+            @include('evidence.partials.custody', ['evidence' => $evidence])
             {{-- Acquisition --}}
             <div class="rounded-lg bg-white p-6 shadow-sm">
                 <h3 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500">Acquisition</h3>
