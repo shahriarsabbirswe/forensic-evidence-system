@@ -121,3 +121,8 @@ Route::middleware('auth')->group(function () {
 
 
 require __DIR__.'/auth.php';
+
+Route::get('/googlee64a737c7dd3953f.html', function () {
+    return response('google-site-verification: googlee64a737c7dd3953f.html', 200)
+        ->header('Content-Type', 'text/plain');
+});
