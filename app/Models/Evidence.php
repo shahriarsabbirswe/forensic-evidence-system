@@ -97,7 +97,12 @@ class Evidence extends Model
     {
         return $this->transfers()->whereIn('status', EvidenceTransfer::IN_FLIGHT)->first();
     }
-
+    public function custodyEntries(): HasMany
+    {
+        return $this->hasMany(CustodyEntry::class)
+            ->orderBy('occurred_at')
+            ->orderBy('id');
+    }
     public function showUrl(): string
     {
         return route('evidence.show', $this);

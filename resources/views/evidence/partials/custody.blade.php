@@ -1,8 +1,9 @@
 @php
-    $holder     = $evidence->currentHolder;
-    $open       = $evidence->openTransfer();
-    $canRequest = auth()->user()->can('transfer.request') && (int) $evidence->current_holder_id === auth()->id();
-    $recent     = $evidence->transfers()->with(['fromUser', 'toUser', 'requester', 'approver'])->limit(5)->get();
+    $holder        = $evidence->currentHolder;
+    $open          = $evidence->openTransfer();
+    $canRequest    = auth()->user()->can('transfer.request') && (int) $evidence->current_holder_id === auth()->id();
+    $recent        = $evidence->transfers()->with(['fromUser', 'toUser', 'requester', 'approver'])->limit(5)->get();
+    $ledgerEntries = $evidence->custodyEntries()->with(['fromUser', 'toUser', 'recorder'])->get();
 @endphp
 
 <div class="mt-6 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
@@ -32,6 +33,76 @@
                class="inline-block rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700">
                 Request Transfer
             </a>
+        @endif
+    </div>
+
+    {{-- Official Immutable Custody Ledger (FR5) --}}
+    <div class="mt-8 border-t border-slate-200 pt-6">
+        <div class="mb-3 flex items-center justify-between">
+            <h4 class="text-sm font-semibold uppercase tracking-wide text-slate-600">
+                Official Custody Ledger (Append-Only)
+            </h4>
+            <span class="rounded-full bg-slate-100 px-2.5 py-0.5 font-mono text-xs text-slate-600">
+                {{ $ledgerEntries->count() }} {{ Str::plural('entry', $ledgerEntries->count()) }}
+            </span>
+        </div>
+
+        @if ($ledgerEntries->isEmpty())
+            <p class="text-sm text-slate-500">No ledger entries recorded yet for this item.</p>
+        @else
+            <div class="overflow-x-auto rounded-md border border-slate-200">
+                <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
+                    <thead class="bg-slate-50 text-xs font-semibold uppercase text-slate-500">
+                        <tr>
+                            <th class="px-4 py-2.5">#</th>
+                            <th class="px-4 py-2.5">Timestamp</th>
+                            <th class="px-4 py-2.5">Action</th>
+                            <th class="px-4 py-2.5">Custody Movement</th>
+                            <th class="px-4 py-2.5">Seal Verification</th>
+                            <th class="px-4 py-2.5">Purpose / Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 bg-white">
+                        @foreach ($ledgerEntries as $index => $entry)
+                            <tr>
+                                <td class="whitespace-nowrap px-4 py-3 font-mono text-xs text-slate-400">
+                                    {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}
+                                </td>
+                                <td class="whitespace-nowrap px-4 py-3 font-mono text-xs text-slate-600">
+                                    {{ $entry->occurred_at?->format('d M Y, h:i A') }}
+                                </td>
+                                <td class="whitespace-nowrap px-4 py-3">
+                                    <span class="inline-flex items-center rounded-md bg-indigo-50 px-2 py-0.5 text-xs font-medium capitalize text-indigo-700 ring-1 ring-inset ring-indigo-600/20">
+                                        {{ $entry->action }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-slate-700">
+                                    @if ($entry->fromUser)
+                                        <span class="font-medium">{{ $entry->fromUser->name }}</span>
+                                        <span class="mx-1 text-slate-400">&rarr;</span>
+                                    @endif
+                                    <span class="font-semibold text-slate-900">{{ $entry->toUser->name ?? 'System' }}</span>
+                                    <div class="text-xs text-slate-400">Recorded by: {{ $entry->recorder->name ?? 'System' }}</div>
+                                </td>
+                                <td class="px-4 py-3 text-xs">
+                                    @if ($entry->release_seal_condition)
+                                        <div><span class="text-slate-400">Out:</span> {{ $entry->release_seal_condition }}</div>
+                                    @endif
+                                    @if ($entry->receipt_seal_condition)
+                                        <div class="font-medium text-emerald-700"><span class="text-slate-400 font-normal">In:</span> {{ $entry->receipt_seal_condition }}</div>
+                                    @endif
+                                    @if (! $entry->release_seal_condition && ! $entry->receipt_seal_condition)
+                                        <span class="text-slate-400">—</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3 text-xs text-slate-600">
+                                    {{ $entry->reason ?? '—' }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         @endif
     </div>
 
