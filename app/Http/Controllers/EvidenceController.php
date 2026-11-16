@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Services\CustodyLedgerService;
 
 class EvidenceController extends Controller
 {
@@ -78,8 +79,14 @@ class EvidenceController extends Controller
 
             unset($data['evidence_file']);
 
-            return Evidence::create($data);
-        });
+unset($data['evidence_file']);
+
+            $evidence = Evidence::create($data);
+
+            app(CustodyLedgerService::class)->recordRegistration($evidence, $request->user()->id);
+
+            return $evidence;
+            });
 
         return redirect()
             ->route('evidence.show', $evidence)

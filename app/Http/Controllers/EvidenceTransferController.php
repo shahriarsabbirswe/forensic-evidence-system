@@ -8,7 +8,7 @@ use App\Models\EvidenceTransfer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Services\CustodyLedgerService;
 /**
  * FR6: evidence transfer with supervisor approval and dual sign off.
  *
@@ -194,14 +194,13 @@ class EvidenceTransferController extends Controller
                 $evidence->current_holder_id = $done->to_user_id;
                 $evidence->save();
 
-                // ============================================================
-                // FR5 BELONGS HERE (Sabbir Ahmed)
-                // The transfer is complete. Write one entry into the custody
-                // ledger (custody_entries) using $done and $evidence.
-                // Useful values: $done->from_user_id, $done->to_user_id,
-                // $done->release_seal_condition, $done->receipt_seal_condition,
-                // $done->purpose, $done->received_at.
-                // ============================================================
+                function (EvidenceTransfer $done) use ($user) {
+                $evidence = $done->evidence;
+                $evidence->current_holder_id = $done->to_user_id;
+                $evidence->save();
+
+                app(CustodyLedgerService::class)->recordTransferCompleted($done, $user->id);
+            }
             }
         );
 
