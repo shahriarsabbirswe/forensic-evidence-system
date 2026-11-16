@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>DFEMS — Digital Forensic Evidence Management System</title>
+<meta name="description" content="DFEMS (Digital Forensic Evidence Management System) — Secure chain-of-custody tracking, SHA-256 evidence integrity verification, and investigation case management platform.">
+<meta name="keywords" content="DFEMS, Digital Forensic Evidence Management System, Chain of Custody, Forensic Evidence Tracking, SHA-256 Verification">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://dfems.tech/">
+
+<!-- সোশ্যাল মিডিয়া ও সার্চ প্রিভিউ (Open Graph) -->
+<meta property="og:title" content="DFEMS — Digital Forensic Evidence Management System">
+<meta property="og:description" content="Enterprise-grade Digital Forensic Evidence Management System with tamper-evident chain-of-custody and role-based access control.">
+<meta property="og:url" content="https://dfems.tech/">
+<meta property="og:type" content="website">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DFEMS — Digital Forensic Evidence Management System</title>
