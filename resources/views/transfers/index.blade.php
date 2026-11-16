@@ -45,14 +45,11 @@
                     <tbody class="divide-y divide-gray-100">
                         @forelse ($transfers as $t)
                             <tr>
-                                <td class="px-4 py-3 font-medium">{{ $t->evidence->evidence_number ?? '-' }}</td>
-                                <td class="px-4 py-3">{{ $t->fromUser->name ?? '-' }}</td>
+                                <td class="px-4 py-3"><x-hash :value="$t->evidence->evidence_number ?? null" short /></td>                                <td class="px-4 py-3">{{ $t->fromUser->name ?? '-' }}</td>
                                 <td class="px-4 py-3">{{ $t->toUser->name ?? '-' }}</td>
                                 <td class="px-4 py-3">{{ \Illuminate\Support\Str::limit($t->purpose, 40) }}</td>
                                 <td class="px-4 py-3">
-                                    <span class="rounded-full px-2 py-1 text-xs font-medium {{ $badge[$t->status] ?? '' }}">
-                                        {{ ucfirst($t->status) }}
-                                    </span>
+                                    <x-status-badge :status="$t->status" />
                                 </td>
                                 <td class="px-4 py-3 text-gray-500">{{ $t->created_at->format('d M Y H:i') }}</td>
                                 <td class="px-4 py-3 text-right">

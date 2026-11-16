@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-xl font-semibold leading-tight text-gray-800">{{ $case->title }}</h2>
-                <p class="font-mono text-xs text-gray-500">{{ $case->case_number }}</p>
+              <div class="mt-1"><x-hash :value="$case->case_number" short /></div>
             </div>
             <div class="flex gap-2">
                 @can('case.edit')
@@ -180,21 +180,12 @@
             <tbody class="divide-y divide-gray-100">
                 @foreach ($case->evidence as $item)
                     <tr class="hover:bg-gray-50">
-                        <td class="py-2 font-mono text-xs">{{ $item->evidence_number }}</td>
-                        <td class="py-2 font-medium text-gray-900">{{ $item->device_type }}</td>
+                   <td class="py-2"><x-hash :value="$item->evidence_number" short /></td>
+                    <td class="py-2 font-medium text-gray-900">{{ $item->device_type }}</td>
                         <td class="py-2 text-gray-600">{{ ucfirst($item->kind) }}</td>
                         <td class="py-2 text-gray-600">{{ $item->seized_at?->format('d M Y') }}</td>
                         <td class="py-2">
-                            @if ($item->sha256_hash)
-                                <span class="font-mono text-xs text-gray-600"
-                                      title="{{ $item->sha256_hash }}">
-                                    {{ substr($item->sha256_hash, 0, 12) }}...
-                                </span>
-                            @elseif ($item->isDigital())
-                                <span class="text-xs text-amber-600">No baseline</span>
-                            @else
-                                <span class="text-xs text-gray-400">Not applicable</span>
-                            @endif
+                           <x-hash :value="$item->sha256_hash" short />
                         </td>
                         <td class="py-2 text-right">
                             <a href="{{ route('evidence.show', $item) }}"

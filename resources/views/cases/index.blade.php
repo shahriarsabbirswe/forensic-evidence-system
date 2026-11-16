@@ -65,20 +65,12 @@
                         @forelse ($cases as $case)
                             @php $days = $case->daysRemaining(); @endphp
                             <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3 font-mono text-xs">{{ $case->case_number }}</td>
-                                <td class="px-4 py-3 font-medium text-gray-900">{{ $case->title }}</td>
+                            <td class="px-4 py-3"><x-hash :value="$case->case_number" short /></td>
+                            <td class="px-4 py-3 font-medium text-gray-900">{{ $case->title }}</td>
                                 <td class="px-4 py-3 text-gray-600">{{ $case->crime_type }}</td>
-                                <td class="px-4 py-3">
-                                    <span class="rounded-full px-2 py-1 text-xs
-                                        @class([
-                                            'bg-blue-100 text-blue-800'   => $case->status === 'open',
-                                            'bg-amber-100 text-amber-800' => $case->status === 'under_investigation',
-                                            'bg-gray-200 text-gray-700'   => $case->status === 'closed',
-                                            'bg-gray-100 text-gray-500'   => $case->status === 'archived',
-                                        ])">
-                                        {{ ucfirst(str_replace('_',' ',$case->status)) }}
-                                    </span>
-                                </td>
+                               <td class="px-4 py-3">
+    <x-status-badge :status="$case->status" />
+</td>
                                 <td class="px-4 py-3 text-gray-600">{{ $case->evidence_count }}</td>
                                 <td class="px-4 py-3">
                                     @if ($days === null)
