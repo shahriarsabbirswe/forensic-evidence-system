@@ -189,18 +189,12 @@ class EvidenceTransferController extends Controller
             ],
             // Runs inside the same database transaction, so the transfer and
             // the change of holder are saved together or not at all.
-            function (EvidenceTransfer $done) {
-                $evidence = $done->evidence;
-                $evidence->current_holder_id = $done->to_user_id;
-                $evidence->save();
-
-                function (EvidenceTransfer $done) use ($user) {
+           function (EvidenceTransfer $done) use ($user) {
                 $evidence = $done->evidence;
                 $evidence->current_holder_id = $done->to_user_id;
                 $evidence->save();
 
                 app(CustodyLedgerService::class)->recordTransferCompleted($done, $user->id);
-            }
             }
         );
 
