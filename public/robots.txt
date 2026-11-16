@@ -1,2 +1,8 @@
-User-agent: *
-Disallow:
+﻿User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /dashboard
+Disallow: /cases
+Disallow: /evidence
+
+Sitemap: https://dfems.tech/sitemap.xml
