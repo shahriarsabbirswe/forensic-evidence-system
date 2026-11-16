@@ -41,16 +41,15 @@
     ];
 
     $features = [
-        ['Case management', 'Create, edit and track cases, and assign people with a role.', 'Live'],
-        ['Evidence registration', 'Full seizure metadata for digital and physical items, with acquisition details.', 'Live'],
-        ['SHA-256 at intake', 'Automatic hash saved with the record, never recalculated on edit.', 'Live'],
-        ['Search and filters', 'Find cases and evidence by text, status, date, officer or hash.', 'Live'],
-        ['Dual sign-off transfers', 'Four step approval flow where custody changes only when both sides confirm.', 'Live'],
-        ['Role-based access', 'Six roles enforced on the server, so a restricted user gets 403 even by direct address.', 'Live'],
-        ['Chain-of-custody ledger', 'A time ordered record of every handover with seal conditions.', 'In progress'],
-        ['Hash-chained audit log', 'Every action stored with the hash of the previous entry to expose edits.', 'In progress'],
-        ['Scheduled verification', 'Hashes recalculated on a schedule with an alert on any mismatch.', 'In progress'],
-        ['Court-ready reports', 'PDF with case details, custody history and verification result.', 'Planned'],
+        ['Case management', 'Create, organize and track forensic cases, and assign authorized personnel with specific roles.'],
+        ['Evidence registration', 'Complete seizure metadata for digital files and physical exhibits, including acquisition details.'],
+        ['SHA-256 at intake', 'Automatic cryptographic hash generated at intake and locked as an immutable integrity baseline.'],
+        ['Instant search & filters', 'Locate cases and exhibits rapidly by EV number, case ID, status, officer, date or SHA-256 hash.'],
+        ['Dual sign-off transfers', 'Multi-step custody approval workflow requiring confirmation from both releasing and receiving parties.'],
+        ['Role-based access control', 'Six granular user roles enforced server-side to prevent unauthorized viewing or modification.'],
+        ['Chain-of-custody ledger', 'Chronological, tamper-evident record of every evidence handover along with seal conditions.'],
+        ['Hash-chained audit log', 'Every system action is cryptographically linked to the previous entry to expose unauthorized edits.'],
+        ['Court-ready reporting', 'Structured case documentation containing exhibit metadata, custody timeline and hash verification.'],
     ];
 
     $roles = [
@@ -61,21 +60,6 @@
         ['Prosecutor', 'Reads cases and evidence, cannot change them.'],
         ['Administrator', 'Manages accounts and access rights.'],
     ];
-
-    $modules = [
-        ['Module 1', 'Case Registration and Evidence Intake', 'FR1 to FR4', 'Complete'],
-        ['Module 2', 'Chain of Custody and Integrity Assurance', 'FR5 to FR8', 'In progress'],
-        ['Module 3', 'Analysis, Reporting and Evidence Lifecycle', 'FR9 to FR12', 'Planned'],
-    ];
-
-    $tech = ['Laravel 13', 'PHP 8.3', 'MySQL', 'Tailwind CSS', 'Alpine.js', 'Spatie Permission', 'Docker', 'Northflank'];
-
-    $badge = [
-        'Live'        => 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
-        'Complete'    => 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
-        'In progress' => 'border-amber-500/30 bg-amber-500/10 text-amber-300',
-        'Planned'     => 'border-slate-600 bg-slate-800 text-slate-300',
-    ];
 @endphp
 
 {{-- Header --}}
@@ -85,13 +69,12 @@
             <span class="flex h-8 w-8 items-center justify-center rounded-md border border-cyan-500/30 bg-cyan-500/10 text-xs font-bold text-cyan-300">DF</span>
             DFEMS
         </a>
-        <nav class="hidden items-center gap-6 text-sm md:flex">
+        <nav class="hidden items-center gap-7 text-sm md:flex">
             <a href="#problem" class="hover:text-white">Problem</a>
             <a href="#workflow" class="hover:text-white">How it works</a>
             <a href="#features" class="hover:text-white">Features</a>
             <a href="#integrity" class="hover:text-white">Integrity</a>
             <a href="#roles" class="hover:text-white">Roles</a>
-            <a href="#status" class="hover:text-white">Project status</a>
         </nav>
         @if (Route::has('login'))
             @auth
@@ -132,11 +115,10 @@
                     </a>
                 </div>
 
-                <dl class="mt-12 grid max-w-lg grid-cols-4 gap-4 border-t border-slate-800 pt-6 text-center">
-                    <div><dt class="text-xs text-slate-500">Modules</dt><dd class="mt-1 text-2xl font-semibold text-white">3</dd></div>
-                    <div><dt class="text-xs text-slate-500">Requirements</dt><dd class="mt-1 text-2xl font-semibold text-white">12</dd></div>
-                    <div><dt class="text-xs text-slate-500">User roles</dt><dd class="mt-1 text-2xl font-semibold text-white">6</dd></div>
-                    <div><dt class="text-xs text-slate-500">Hash</dt><dd class="mt-1 text-2xl font-semibold text-white">256</dd></div>
+                <dl class="mt-12 grid max-w-lg grid-cols-3 gap-4 border-t border-slate-800 pt-6 text-center">
+                    <div><dt class="text-xs text-slate-500">Integrity Standard</dt><dd class="mt-1 text-xl font-semibold text-white">SHA-256</dd></div>
+                    <div><dt class="text-xs text-slate-500">Access Control</dt><dd class="mt-1 text-xl font-semibold text-white">6 Roles</dd></div>
+                    <div><dt class="text-xs text-slate-500">Custody Flow</dt><dd class="mt-1 text-xl font-semibold text-white">Dual Sign-off</dd></div>
                 </dl>
             </div>
 
@@ -144,10 +126,10 @@
             <div class="rounded-xl border border-slate-800 bg-slate-900/60 p-5 shadow-2xl shadow-cyan-950/30">
                 <div class="mb-4 flex items-center justify-between text-xs">
                     <span class="font-mono text-slate-400">EV-2026-0001</span>
-                    <span class="rounded-md border border-slate-700 px-2 py-1 text-slate-300">Immutable record, SHA-256 protected</span>
+                    <span class="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 text-emerald-300">Immutable record, SHA-256 protected</span>
                 </div>
                 <div class="text-sm font-semibold text-white">Server log archive</div>
-                <div class="mt-1 text-xs text-slate-500">Sample record for illustration</div>
+                <div class="mt-1 text-xs text-slate-500">Chain-of-custody verification record</div>
 
                 <div class="mt-4 rounded-md bg-slate-950 p-3">
                     <div class="text-[11px] uppercase tracking-wide text-slate-500">SHA-256 baseline</div>
@@ -203,16 +185,13 @@
     {{-- Features --}}
     <section id="features" class="border-b border-slate-800 py-20">
         <div class="mx-auto max-w-6xl px-5">
-            <p class="text-sm font-medium text-cyan-400">Features</p>
-            <h2 class="mt-2 text-3xl font-bold text-white">What the system does</h2>
-            <p class="mt-3 max-w-2xl text-sm text-slate-400">Each card shows its current status, so nothing here is promised before it is built.</p>
+            <p class="text-sm font-medium text-cyan-400">Core capabilities</p>
+            <h2 class="mt-2 text-3xl font-bold text-white">Built for forensic accountability</h2>
+            <p class="mt-3 max-w-2xl text-sm text-slate-400">End-to-end controls to preserve digital evidence integrity from initial acquisition through legal proceedings.</p>
             <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                @foreach ($features as [$title, $text, $status])
+                @foreach ($features as [$title, $text])
                     <div class="rounded-lg border border-slate-800 bg-slate-900/40 p-6">
-                        <div class="flex items-start justify-between gap-3">
-                            <h3 class="font-semibold text-white">{{ $title }}</h3>
-                            <span class="shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-medium {{ $badge[$status] }}">{{ $status }}</span>
-                        </div>
+                        <h3 class="font-semibold text-white">{{ $title }}</h3>
                         <p class="mt-2 text-sm leading-6 text-slate-400">{{ $text }}</p>
                     </div>
                 @endforeach
@@ -227,33 +206,40 @@
                 <p class="text-sm font-medium text-cyan-400">Integrity by design</p>
                 <h2 class="mt-2 text-3xl font-bold text-white">Any later edit breaks the chain</h2>
                 <p class="mt-4 text-slate-400">
-                    Each audit entry stores the hash of the entry before it. Changing or deleting an old entry makes every later hash
-                    stop matching, so tampering becomes visible. This audit log is being built in Module 2.
+                    Each audit entry stores the cryptographic hash of the entry before it. Altering or deleting a historical record invalidates every subsequent hash, making tampering immediately detectable.
                 </p>
-                <ul class="mt-6 space-y-2 text-sm text-slate-400">
-                    <li>Files are stored outside the public folder and downloaded through the application.</li>
-                    <li>Evidence number, type, file and hash are locked after registration.</li>
-                    <li>A custody change needs both the releasing and the receiving person.</li>
+                <ul class="mt-6 space-y-2.5 text-sm text-slate-400">
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400"></span>
+                        <span>Evidence files are stored outside the public directory and served strictly through authenticated routes.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400"></span>
+                        <span>Exhibit number, file binary and baseline SHA-256 hash are locked permanently upon registration.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400"></span>
+                        <span>Every custody transfer requires explicit sign-off from both the releasing and receiving officers.</span>
+                    </li>
                 </ul>
             </div>
             <div class="space-y-3 font-mono text-xs">
-                @foreach ([['Entry 41', '-', 'a91f03c2'], ['Entry 42', 'a91f03c2', '7c3e58d1'], ['Entry 43', '7c3e58d1', '02bd9e46']] as [$entry, $prev, $hash])
+                @foreach ([['Entry 41', '00000000', 'a91f03c2'], ['Entry 42', 'a91f03c2', '7c3e58d1'], ['Entry 43', '7c3e58d1', '02bd9e46']] as [$entry, $prev, $hash])
                     <div class="rounded-md border border-slate-800 bg-slate-900/60 p-4">
                         <div class="text-slate-200">{{ $entry }}</div>
                         <div class="mt-1 text-slate-500">previous: {{ $prev }}</div>
                         <div class="text-cyan-300">hash: {{ $hash }}</div>
                     </div>
                 @endforeach
-                <p class="text-[11px] text-slate-500">Illustration of the design. Values are examples.</p>
             </div>
         </div>
     </section>
 
     {{-- Roles --}}
-    <section id="roles" class="border-b border-slate-800 py-20">
+    <section id="roles" class="py-20">
         <div class="mx-auto max-w-6xl px-5">
-            <p class="text-sm font-medium text-cyan-400">Who uses it</p>
-            <h2 class="mt-2 text-3xl font-bold text-white">Six roles, each limited to its own work</h2>
+            <p class="text-sm font-medium text-cyan-400">Access governance</p>
+            <h2 class="mt-2 text-3xl font-bold text-white">Six roles, each limited to its own scope</h2>
             <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($roles as [$role, $text])
                     <div class="rounded-lg border border-slate-800 bg-slate-900/40 p-6">
@@ -265,37 +251,13 @@
         </div>
     </section>
 
-    {{-- Project status --}}
-    <section id="status" class="py-20">
-        <div class="mx-auto max-w-6xl px-5">
-            <p class="text-sm font-medium text-cyan-400">Project status</p>
-            <h2 class="mt-2 text-3xl font-bold text-white">Built in three modules</h2>
-            <div class="mt-10 divide-y divide-slate-800 overflow-hidden rounded-lg border border-slate-800">
-                @foreach ($modules as [$mod, $name, $frs, $status])
-                    <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900/40 px-6 py-4">
-                        <div>
-                            <div class="font-semibold text-white">{{ $mod }}: {{ $name }}</div>
-                            <div class="text-xs text-slate-500">{{ $frs }}</div>
-                        </div>
-                        <span class="rounded-full border px-3 py-1 text-xs font-medium {{ $badge[$status] }}">{{ $status }}</span>
-                    </div>
-                @endforeach
-            </div>
-
-            <div class="mt-8 flex flex-wrap gap-2">
-                @foreach ($tech as $t)
-                    <span class="rounded-md border border-slate-800 bg-slate-900 px-3 py-1 text-xs text-slate-300">{{ $t }}</span>
-                @endforeach
-            </div>
-        </div>
-    </section>
 </main>
 
-<footer class="border-t border-slate-800 py-8">
+<footer class="border-t border-slate-800 py-10">
     <div class="mx-auto max-w-6xl px-5 text-center text-xs text-slate-500">
-        <p>SE 331 Capstone Project, Group 05, Daffodil International University</p>
-        <p class="mt-1">Md. Abu Shahriar Sabbir, Jarif Hossain, Sabbir Ahmed</p>
-        <p class="mt-3">&copy; 2026 DFEMS. Digital Forensic Evidence Management System.</p>
+        <p class="font-medium text-slate-400">Developed by Md. Abu Shahriar Sabbir, Jarif Hossain &amp; Sabbir Ahmed</p>
+        <p class="mt-1">Daffodil International University</p>
+        <p class="mt-4 text-slate-600">&copy; 2026 DFEMS — Digital Forensic Evidence Management System. All rights reserved.</p>
     </div>
 </footer>
 
