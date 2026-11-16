@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Evidence extends Model
 {
@@ -19,7 +20,7 @@ class Evidence extends Model
         'investigation_case_id',
         'evidence_number',
         'kind',
-
+        'current_holder_id',
         // Seizure metadata (FR2)
         'device_type',
         'make_model',
@@ -71,7 +72,38 @@ class Evidence extends Model
             'preservation_expires_at'  => 'date',
         ];
     }
+        protected static function booted(): void
+    {
+        // A new item is held by the person who registers it.
+        static::creating(function (Evidence $evidence) {
+            if (empty($evidence->current_holder_id)) {
+                $evidence->current_holder_id = $evidence->registered_by ?? auth()->id();
+            }
+        });
+    }
 
+    public function currentHolder(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'current_holder_id');
+    }
+
+    public function transfers(): HasMany
+    {
+        return $this->hasMany(EvidenceTransfer::class)->latest();
+    }
+
+    /** The transfer that is still moving (requested, approved or released), if any. */
+    public function openTransfer(): ?EvidenceTransfer
+    {
+        return $this->transfers()->whereIn('status', EvidenceTransfer::IN_FLIGHT)->first();
+    }
+
+    public function showUrl(): string
+    {
+        return route('evidence.show', $this);
+    }
+
+    
     public function investigationCase(): BelongsTo
     {
         return $this->belongsTo(InvestigationCase::class);

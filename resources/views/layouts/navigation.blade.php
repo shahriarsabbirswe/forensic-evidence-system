@@ -15,9 +15,20 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('search.index')" :active="request()->routeIs('search.index')">
-                    {{ __('Search') }}
-                     </x-nav-link>
+
+                    <x-nav-link :href="route('cases.index')" :active="request()->routeIs('cases.*')">
+                        {{ __('Cases') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('search.index')" :active="request()->routeIs('search.*')">
+                        {{ __('Search') }}
+                    </x-nav-link>
+
+                    @can('transfer.view')
+                        <x-nav-link :href="route('transfers.index')" :active="request()->routeIs('transfers.*')">
+                            {{ __('Transfers') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -73,6 +84,20 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('cases.index')" :active="request()->routeIs('cases.*')">
+                {{ __('Cases') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('search.index')" :active="request()->routeIs('search.*')">
+                {{ __('Search') }}
+            </x-responsive-nav-link>
+
+            @can('transfer.view')
+                <x-responsive-nav-link :href="route('transfers.index')" :active="request()->routeIs('transfers.*')">
+                    {{ __('Transfers') }}
+                </x-responsive-nav-link>
+            @endcan
         </div>
 
         <!-- Responsive Settings Options -->

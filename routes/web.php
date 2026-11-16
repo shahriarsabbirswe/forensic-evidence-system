@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InvestigationCaseController;
 use App\Http\Controllers\EvidenceController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\EvidenceTransferController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -80,7 +81,42 @@ Route::middleware('auth')->group(function () {
     Route::get('/evidence/{evidence}/download', [EvidenceController::class, 'download'])
         ->middleware('can:evidence.view')
         ->name('evidence.download');
+        // FR6: evidence transfers
+    Route::get('/transfers', [EvidenceTransferController::class, 'index'])
+        ->middleware('can:transfer.view')
+        ->name('transfers.index');
 
+    Route::get('/transfers/{transfer}', [EvidenceTransferController::class, 'show'])
+        ->middleware('can:transfer.view')
+        ->name('transfers.show');
+
+    Route::get('/evidence/{evidence}/transfers/create', [EvidenceTransferController::class, 'create'])
+        ->middleware('can:transfer.request')
+        ->name('transfers.create');
+
+    Route::post('/evidence/{evidence}/transfers', [EvidenceTransferController::class, 'store'])
+        ->middleware('can:transfer.request')
+        ->name('transfers.store');
+
+    Route::post('/transfers/{transfer}/approve', [EvidenceTransferController::class, 'approve'])
+        ->middleware('can:transfer.approve')
+        ->name('transfers.approve');
+
+    Route::post('/transfers/{transfer}/reject', [EvidenceTransferController::class, 'reject'])
+        ->middleware('can:transfer.approve')
+        ->name('transfers.reject');
+
+    Route::post('/transfers/{transfer}/release', [EvidenceTransferController::class, 'confirmRelease'])
+        ->middleware('can:transfer.view')
+        ->name('transfers.release');
+
+    Route::post('/transfers/{transfer}/receive', [EvidenceTransferController::class, 'confirmReceipt'])
+        ->middleware('can:transfer.view')
+        ->name('transfers.receive');
+
+    Route::post('/transfers/{transfer}/cancel', [EvidenceTransferController::class, 'cancel'])
+        ->middleware('can:transfer.view')
+        ->name('transfers.cancel');
 });
 
 

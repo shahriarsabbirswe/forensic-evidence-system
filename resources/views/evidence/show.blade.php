@@ -7,6 +7,7 @@
                 </h2>
                 <p class="font-mono text-xs text-gray-500">
                     {{ $evidence->evidence_number }}
+                    <x-immutable-badge :hashed="! empty($evidence->sha256_hash)" />
                     &middot;
                     <a href="{{ route('cases.show', $evidence->investigationCase) }}" class="underline">
                         {{ $evidence->investigationCase->case_number }}
@@ -37,14 +38,14 @@
 
                 @if ($evidence->sha256_hash)
                     <dl class="space-y-3">
-                        <div>
-                            <dt class="text-xs text-gray-500">
-                                {{ strtoupper($evidence->hash_algorithm ?? 'sha256') }} baseline
-                            </dt>
-                            <dd class="mt-1 break-all rounded bg-gray-50 p-3 font-mono text-xs text-gray-900">
-                                {{ $evidence->sha256_hash }}
-                            </dd>
-                        </div>
+                       <div>
+    <dt class="text-xs text-gray-500">
+        {{ strtoupper($evidence->hash_algorithm ?? 'sha256') }} baseline
+    </dt>
+    <dd class="mt-1">
+        <x-hash :value="$evidence->sha256_hash" />
+    </dd>
+</div>
                         <div class="flex gap-10">
                             <div>
                                 <dt class="text-xs text-gray-500">Hashed at</dt>
@@ -146,7 +147,7 @@
                     </div>
                 </dl>
             </div>
-
+            @include('evidence.partials.custody', ['evidence' => $evidence])
             {{-- Acquisition --}}
             <div class="rounded-lg bg-white p-6 shadow-sm">
                 <h3 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500">Acquisition</h3>
