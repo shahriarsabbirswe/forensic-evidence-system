@@ -2,27 +2,28 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\Models\Evidence;
+use App\Models\EvidenceTransfer;
+use App\Observers\EvidenceObserver;
+use App\Observers\EvidenceTransferObserver;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         if ($this->app->environment('production')) {
-    URL::forceScheme('https');
-}
-        //
+            URL::forceScheme('https');
+        }
+
+        Evidence::observe(EvidenceObserver::class);
+
+        EvidenceTransfer::observe(EvidenceTransferObserver::class);
     }
 }

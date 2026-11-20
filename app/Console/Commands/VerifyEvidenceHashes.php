@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Evidence;
+use App\Services\AuditLogService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 #[Description('Verify SHA-256 hashes of stored digital evidence')]
 class VerifyEvidenceHashes extends Command
 {
-    public function handle()
+    public function handle(AuditLogService $auditLogService): int
     {
         $this->info('Starting digital evidence hash verification...');
 
@@ -25,6 +26,8 @@ class VerifyEvidenceHashes extends Command
         $evidences = Evidence::where('kind', 'digital')
             ->orderBy('id')
             ->get();
+
+        $disk = Storage::disk('local');
 
         foreach ($evidences as $evidence) {
 
@@ -39,12 +42,11 @@ class VerifyEvidenceHashes extends Command
                 continue;
             }
 
-            // Check whether the stored file path exists
-            $disk = Storage::disk('local');
-
-            if (empty($evidence->file_path) ||
-                !$disk->exists($evidence->file_path)) {
-
+            // Check whether the evidence file exists
+            if (
+                empty($evidence->file_path) ||
+                !$disk->exists($evidence->file_path)
+            ) {
                 $missingFiles++;
 
                 $this->error(
@@ -54,7 +56,7 @@ class VerifyEvidenceHashes extends Command
                 continue;
             }
 
-            // Generate the current SHA-256 hash
+            // Generate current SHA-256 hash
             $filePath = $disk->path($evidence->file_path);
             $currentHash = hash_file('sha256', $filePath);
 
@@ -70,11 +72,13 @@ class VerifyEvidenceHashes extends Command
 
             $checked++;
 
-            // Compare current hash with the original database hash
-            if (hash_equals(
-                strtolower($evidence->sha256_hash),
-                strtolower($currentHash)
-            )) {
+            // Compare current hash with original hash
+            if (
+                hash_equals(
+                    strtolower($evidence->sha256_hash),
+                    strtolower($currentHash)
+                )
+            ) {
                 $matched++;
 
                 $this->info(
@@ -83,22 +87,44 @@ class VerifyEvidenceHashes extends Command
             } else {
                 $mismatched++;
 
+                // Record integrity mismatch in the hash-chained audit log
+                $auditLogService->createLog(
+                    'integrity_mismatch',
+                    Evidence::class,
+                    $evidence->id,
+                    [
+                        'evidence_number' => $evidence->evidence_number,
+                        'expected_hash' => $evidence->sha256_hash,
+                        'actual_hash' => $currentHash,
+                    ]
+                );
+
                 $this->error(
                     "Evidence {$evidence->evidence_number}: HASH MISMATCH! Possible tampering detected."
                 );
             }
         }
 
+        // Display verification summary
         $this->newLine();
         $this->info('Verification Summary');
-        $this->line("Total digital evidence: " . $evidences->count());
+
+        $this->line(
+            'Total digital evidence: ' . $evidences->count()
+        );
+
         $this->line("Files checked: {$checked}");
         $this->info("Hash matched: {$matched}");
         $this->error("Hash mismatched: {$mismatched}");
         $this->warn("Missing files/unreadable files: {$missingFiles}");
         $this->warn("Missing original hashes: {$missingHashes}");
 
-        if ($mismatched > 0 || $missingFiles > 0) {
+        // Return failure if any integrity issue is found
+        if (
+            $mismatched > 0 ||
+            $missingFiles > 0 ||
+            $missingHashes > 0
+        ) {
             return self::FAILURE;
         }
 
