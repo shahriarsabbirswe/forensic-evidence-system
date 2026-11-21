@@ -42,30 +42,34 @@ The system is built around the Cyber Security Act 2026 (Act No. 81 of 2026, Bang
 
 ## Team
 
-Md. Abu Shahriar Sabbir,  
-Jarif Hossain, 
-Sabbir Ahmed 
+| ID | Name | Requirements |
+| --- | --- | --- |
+| 232-35-541 | Md. Abu Shahriar Sabbir | FR1, FR2, FR6, FR11 |
+| 232-35-136 | Jarif Hossain | FR3, FR7, FR8, FR9 |
+| 232-35-329 | Sabbir Ahmed | FR4, FR5, FR10, FR12 |
 
+Group 05, Lab Section B1.
+
+---
 
 ## Requirements and progress
 
-### Module 1: Case Registration & Evidence Intake
+#### Module 1: Case Registration & Evidence Intake
 
 | # | Requirement | Owner | Status |
 | --- | --- | --- | --- |
 | FR1 | Case creation and management | Md. Abu Shahriar Sabbir | Done |
 | FR2 | Evidence registration with seizure metadata | Md. Abu Shahriar Sabbir | Done |
-| FR3 | Automatic SHA-256 hash at intake | Jarif Hossain | In progress |
+| FR3 | Automatic SHA-256 hash at intake | Jarif Hossain | Done |
 | FR4 | Case and evidence search with filtering | Sabbir Ahmed | Done |
 
 ### Module 2: Chain of Custody & Integrity Assurance
-
 | # | Requirement | Owner | Status |
 | --- | --- | --- | --- |
-| FR5 | Chain of custody ledger | Sabbir Ahmed | Not started |
-| FR6 | Transfer request with approval and dual sign off | Md. Abu Shahriar Sabbir | Not started |
-| FR7 | Scheduled and on demand integrity verification | Jarif Hossain | Not started |
-| FR8 | Tamper evident hash chained audit log | Jarif Hossain | Not started |
+| FR5 | Chain of custody ledger | Sabbir Ahmed | Done |
+| FR6 | Transfer request with approval and dual sign off | Md. Abu Shahriar Sabbir | Done |
+| FR7 | Scheduled and on demand integrity verification | Jarif Hossain | Done |
+| FR8 | Tamper evident hash chained audit log | Jarif Hossain | Done |
 
 ### Module 3: Analysis, Reporting & Evidence Lifecycle
 
@@ -93,65 +97,9 @@ Authentication, role enforcement, notifications and the dashboard are supporting
 Requires PHP 8.3 or higher, Composer 2, Node 18 or higher and MySQL 8. Laragon Full provides all of them.
 
 ```bash
-git clone https://github.com/shahriarsabbirswe/forensic-evidence-system.git
+git clone [https://github.com/shahriarsabbirswe/forensic-evidence-system.git](https://github.com/shahriarsabbirswe/forensic-evidence-system.git)
 cd forensic-evidence-system
 git checkout module-1-evidence-intake
 composer install
 cp .env.example .env
 php artisan key:generate
-```
-
-Set the database section of `.env`:
-
-```
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=forensic_evidence
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-Then:
-
-```bash
-mysql -u root -e "CREATE DATABASE forensic_evidence;"
-php artisan migrate --seed
-npm install
-npm run dev
-```
-
-In a second terminal:
-
-```bash
-php artisan serve
-```
-
-Open `http://127.0.0.1:8000`.
-
----
-
-## Design decisions worth knowing
-
-**Nothing can be deleted.** There is no delete route for a case or for evidence anywhere in the system. Cases are closed or archived through their status field. Evidence is disposed of through FR12, with approval, and the disposal is recorded permanently. Evidence that can vanish defeats the purpose of the system.
-
-**The hash is written in the same transaction as the record.** If an evidence record saved but its hash did not, that item would have no baseline and could never be verified again. Both happen together or neither does.
-
-**The edit form cannot reach the file, the hash or the evidence number.** `UpdateEvidenceRequest` has no validation rules for those fields, so even a crafted request cannot change them.
-
-**The model is named `InvestigationCase`, not `Case`.** `case` is a reserved word in PHP.
-
-**The database table is `evidence`, not `evidences`.** The model sets `protected $table = 'evidence';` to make this explicit.
-
-**Time zone is set explicitly to Asia/Dhaka** in `config/app.php`, and each evidence record also stores the time zone of its acquisition separately. In a forensic context a timestamp without a zone is not a timestamp.
-
----
-
-## Branches
-
-| Branch | Purpose |
-| --- | --- |
-| `main` | Reviewed and approved work |
-| `module-1-evidence-intake` | Current development |
-
-Each module is developed on its own branch and merged into `main` once complete and reviewed.
