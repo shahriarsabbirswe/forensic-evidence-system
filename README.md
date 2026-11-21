@@ -67,10 +67,10 @@ Group 05, Lab Section B1.
 
 | # | Requirement | Owner | Status |
 | --- | --- | --- | --- |
-| FR5 | Chain of custody ledger | Sabbir Ahmed | Not started |
-| FR6 | Transfer request with approval and dual sign off | Md. Abu Shahriar Sabbir | Not started |
-| FR7 | Scheduled and on demand integrity verification | Jarif Hossain | Not started |
-| FR8 | Tamper evident hash chained audit log | Jarif Hossain | Not started |
+| FR5 | Chain of custody ledger | Sabbir Ahmed | Done |
+| FR6 | Transfer request with approval and dual sign off | Md. Abu Shahriar Sabbir | Done |
+| FR7 | Scheduled and on demand integrity verification | Jarif Hossain | Done |
+| FR8 | Tamper evident hash chained audit log | Jarif Hossain | Done |
 
 ### Module 3: Analysis, Reporting & Evidence Lifecycle
 
