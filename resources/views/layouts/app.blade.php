@@ -25,6 +25,7 @@
                 ['group' => 'Investigation', 'label' => 'Cases',             'route' => 'cases.index',     'active' => 'cases.*',    'can' => 'case.view'],
                 ['group' => 'Investigation', 'label' => 'Search',            'route' => 'search.index',    'active' => 'search.*',   'can' => null],
                 ['group' => 'Investigation', 'label' => 'Custody transfers', 'route' => 'transfers.index', 'active' => 'transfers.*', 'can' => 'transfer.view'],
+                ['group' => 'Investigation', 'label' => 'Retention & Lifecycle', 'route' => 'retention.index', 'active' => 'retention.*', 'can' => null],
                 ['group' => 'Account',       'label' => 'Profile',           'route' => 'profile.edit',    'active' => 'profile.*',  'can' => null],
             ];
 
