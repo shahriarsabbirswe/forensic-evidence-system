@@ -172,7 +172,7 @@ class EvidenceTransferController extends Controller
      |--------------------------------------------------------------- */
 
     public function confirmReceipt(Request $request, EvidenceTransfer $transfer)
-    {
+   {
         $user = $request->user();
 
         abort_unless($user->id === (int) $transfer->to_user_id, 403);
@@ -189,24 +189,17 @@ class EvidenceTransferController extends Controller
             ],
             // Runs inside the same database transaction, so the transfer and
             // the change of holder are saved together or not at all.
-            function (EvidenceTransfer $done) {
-                $evidence = $done->evidence;
-                $evidence->current_holder_id = $done->to_user_id;
-                $evidence->save();
-
-                function (EvidenceTransfer $done) use ($user) {
+            function (EvidenceTransfer $done) use ($user) {
                 $evidence = $done->evidence;
                 $evidence->current_holder_id = $done->to_user_id;
                 $evidence->save();
 
                 app(CustodyLedgerService::class)->recordTransferCompleted($done, $user->id);
             }
-            }
         );
 
         return $this->result($transfer, $ok, 'Receipt confirmed. Custody has moved to the receiver.');
     }
-
     /* ---------------------------------------------------------------
      | Cancel (before release)
      |--------------------------------------------------------------- */

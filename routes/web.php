@@ -6,6 +6,9 @@ use App\Http\Controllers\InvestigationCaseController;
 use App\Http\Controllers\EvidenceController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\EvidenceTransferController;
+use App\Http\Controllers\InvestigationTimelineController;
+use App\Http\Controllers\EvidenceLifecycleController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -81,7 +84,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/evidence/{evidence}/download', [EvidenceController::class, 'download'])
         ->middleware('can:evidence.view')
         ->name('evidence.download');
-        // FR6: evidence transfers
+
+    // FR6: evidence transfers
     Route::get('/transfers', [EvidenceTransferController::class, 'index'])
         ->middleware('can:transfer.view')
         ->name('transfers.index');
@@ -117,7 +121,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/transfers/{transfer}/cancel', [EvidenceTransferController::class, 'cancel'])
         ->middleware('can:transfer.view')
         ->name('transfers.cancel');
-});
 
+    // Module 3: FR10 (Investigation Timeline) & FR12 (Retention, Archival & Disposal)
+    Route::get('/timeline/{evidence}', [InvestigationTimelineController::class, 'show'])
+        ->name('timeline.show');
+
+    Route::get('/retention', [EvidenceLifecycleController::class, 'index'])
+        ->name('retention.index');
+
+    Route::post('/evidence/{evidence}/retention', [EvidenceLifecycleController::class, 'setRetention'])
+        ->name('evidence.retention');
+
+    Route::post('/evidence/{evidence}/archive', [EvidenceLifecycleController::class, 'archive'])
+        ->name('evidence.archive');
+
+    Route::post('/evidence/{evidence}/dispose', [EvidenceLifecycleController::class, 'dispose'])
+        ->name('evidence.dispose');
+});
 
 require __DIR__.'/auth.php';
