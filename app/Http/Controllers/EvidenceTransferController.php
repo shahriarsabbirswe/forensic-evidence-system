@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\CustodyLedgerService;
+
 /**
  * FR6: evidence transfer with supervisor approval and dual sign off.
  *
@@ -172,7 +173,7 @@ class EvidenceTransferController extends Controller
      |--------------------------------------------------------------- */
 
     public function confirmReceipt(Request $request, EvidenceTransfer $transfer)
-   {
+    {
         $user = $request->user();
 
         abort_unless($user->id === (int) $transfer->to_user_id, 403);
@@ -200,6 +201,7 @@ class EvidenceTransferController extends Controller
 
         return $this->result($transfer, $ok, 'Receipt confirmed. Custody has moved to the receiver.');
     }
+
     /* ---------------------------------------------------------------
      | Cancel (before release)
      |--------------------------------------------------------------- */

@@ -8,6 +8,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\EvidenceTransferController;
 use App\Http\Controllers\InvestigationTimelineController;
 use App\Http\Controllers\EvidenceLifecycleController;
+use App\Http\Controllers\ForensicReportController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -58,6 +59,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/cases/{case}/assign/{user}', [InvestigationCaseController::class, 'unassign'])
         ->middleware('can:case.assign')
         ->name('cases.unassign');
+
+    // FR11: Court-ready forensic report generation
+    Route::get('/cases/{case}/report/preview', [ForensicReportController::class, 'preview'])
+        ->middleware('can:case.view')
+        ->name('cases.report.preview');
+
+    Route::get('/cases/{case}/report/download', [ForensicReportController::class, 'download'])
+        ->middleware('can:case.view')
+        ->name('cases.report.download');
 
     // Evidence is always registered against a case.
     Route::get('/cases/{case}/evidence/create', [EvidenceController::class, 'create'])
@@ -140,3 +150,8 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/googlee64a737c7dd3953f.html', function () {
+    return response('google-site-verification: googlee64a737c7dd3953f.html', 200)
+        ->header('Content-Type', 'text/plain');
+});

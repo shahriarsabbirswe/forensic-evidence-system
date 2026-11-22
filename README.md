@@ -54,7 +54,7 @@ Group 05, Lab Section B1.
 
 ## Requirements and progress
 
-### Module 1: Case Registration & Evidence Intake
+#### Module 1: Case Registration & Evidence Intake
 
 | # | Requirement | Owner | Status |
 | --- | --- | --- | --- |
@@ -64,13 +64,12 @@ Group 05, Lab Section B1.
 | FR4 | Case and evidence search with filtering | Sabbir Ahmed | Done |
 
 ### Module 2: Chain of Custody & Integrity Assurance
-
 | # | Requirement | Owner | Status |
 | --- | --- | --- | --- |
-| FR5 | Chain of custody ledger | Sabbir Ahmed | Not started |
-| FR6 | Transfer request with approval and dual sign off | Md. Abu Shahriar Sabbir | Not started |
-| FR7 | Scheduled and on demand integrity verification | Jarif Hossain | Not started |
-| FR8 | Tamper evident hash chained audit log | Jarif Hossain | Not started |
+| FR5 | Chain of custody ledger | Sabbir Ahmed | Done |
+| FR6 | Transfer request with approval and dual sign off | Md. Abu Shahriar Sabbir | Done |
+| FR7 | Scheduled and on demand integrity verification | Jarif Hossain | Done |
+| FR8 | Tamper evident hash chained audit log | Jarif Hossain | Done |
 
 ### Module 3: Analysis, Reporting & Evidence Lifecycle
 
