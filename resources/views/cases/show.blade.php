@@ -1,11 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
                 <h2 class="text-xl font-semibold leading-tight text-gray-800">{{ $case->title }}</h2>
-              <div class="mt-1"><x-hash :value="$case->case_number" short /></div>
+                <div class="mt-1"><x-hash :value="$case->case_number" short /></div>
             </div>
-            <div class="flex gap-2">
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('cases.report.preview', $case) }}" target="_blank"
+                   class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    Preview Report
+                </a>
+                <a href="{{ route('cases.report.download', $case) }}"
+                   class="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
+                    Download Court PDF
+                </a>
                 @can('case.edit')
                     <a href="{{ route('cases.edit', $case) }}"
                        class="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50">Edit</a>
@@ -149,54 +157,54 @@
                 @endcan
             </div>
 
-{{-- Evidence --}}
-<div class="rounded-lg bg-white p-6 shadow-sm">
-    <div class="mb-4 flex items-center justify-between">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500">
-            Evidence ({{ $case->evidence->count() }})
-        </h3>
-        @can('evidence.register')
-            <a href="{{ route('evidence.create', $case) }}"
-               class="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
-                Register Evidence
-            </a>
-        @endcan
-    </div>
+            {{-- Evidence --}}
+            <div class="rounded-lg bg-white p-6 shadow-sm">
+                <div class="mb-4 flex items-center justify-between">
+                    <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-500">
+                        Evidence ({{ $case->evidence->count() }})
+                    </h3>
+                    @can('evidence.register')
+                        <a href="{{ route('evidence.create', $case) }}"
+                           class="rounded-md bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
+                            Register Evidence
+                        </a>
+                    @endcan
+                </div>
 
-    @if ($case->evidence->isEmpty())
-        <p class="text-sm text-gray-500">No evidence registered against this case yet.</p>
-    @else
-        <table class="min-w-full divide-y divide-gray-200 text-sm">
-            <thead class="text-left text-xs uppercase tracking-wide text-gray-500">
-                <tr>
-                    <th class="py-2">Evidence No.</th>
-                    <th class="py-2">Device</th>
-                    <th class="py-2">Type</th>
-                    <th class="py-2">Seized</th>
-                    <th class="py-2">Hash</th>
-                    <th class="py-2"></th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
-                @foreach ($case->evidence as $item)
-                    <tr class="hover:bg-gray-50">
-                   <td class="py-2"><x-hash :value="$item->evidence_number" short /></td>
-                    <td class="py-2 font-medium text-gray-900">{{ $item->device_type }}</td>
-                        <td class="py-2 text-gray-600">{{ ucfirst($item->kind) }}</td>
-                        <td class="py-2 text-gray-600">{{ $item->seized_at?->format('d M Y') }}</td>
-                        <td class="py-2">
-                           <x-hash :value="$item->sha256_hash" short />
-                        </td>
-                        <td class="py-2 text-right">
-                            <a href="{{ route('evidence.show', $item) }}"
-                               class="text-indigo-600 hover:underline">View</a>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @endif
-</div>
+                @if ($case->evidence->isEmpty())
+                    <p class="text-sm text-gray-500">No evidence registered against this case yet.</p>
+                @else
+                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                        <thead class="text-left text-xs uppercase tracking-wide text-gray-500">
+                            <tr>
+                                <th class="py-2">Evidence No.</th>
+                                <th class="py-2">Device</th>
+                                <th class="py-2">Type</th>
+                                <th class="py-2">Seized</th>
+                                <th class="py-2">Hash</th>
+                                <th class="py-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @foreach ($case->evidence as $item)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="py-2"><x-hash :value="$item->evidence_number" short /></td>
+                                    <td class="py-2 font-medium text-gray-900">{{ $item->device_type }}</td>
+                                    <td class="py-2 text-gray-600">{{ ucfirst($item->kind) }}</td>
+                                    <td class="py-2 text-gray-600">{{ $item->seized_at?->format('d M Y') }}</td>
+                                    <td class="py-2">
+                                        <x-hash :value="$item->sha256_hash" short />
+                                    </td>
+                                    <td class="py-2 text-right">
+                                        <a href="{{ route('evidence.show', $item) }}"
+                                           class="text-indigo-600 hover:underline">View</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
+            </div>
         </div>
     </div>
 </x-app-layout>

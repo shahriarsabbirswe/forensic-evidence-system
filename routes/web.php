@@ -6,6 +6,8 @@ use App\Http\Controllers\InvestigationCaseController;
 use App\Http\Controllers\EvidenceController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\EvidenceTransferController;
+use App\Http\Controllers\ForensicReportController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -56,6 +58,15 @@ Route::middleware('auth')->group(function () {
         ->middleware('can:case.assign')
         ->name('cases.unassign');
 
+    // FR11: Court-ready forensic report generation
+    Route::get('/cases/{case}/report/preview', [ForensicReportController::class, 'preview'])
+        ->middleware('can:case.view')
+        ->name('cases.report.preview');
+
+    Route::get('/cases/{case}/report/download', [ForensicReportController::class, 'download'])
+        ->middleware('can:case.view')
+        ->name('cases.report.download');
+
     // Evidence is always registered against a case.
     Route::get('/cases/{case}/evidence/create', [EvidenceController::class, 'create'])
         ->middleware('can:evidence.register')
@@ -81,7 +92,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/evidence/{evidence}/download', [EvidenceController::class, 'download'])
         ->middleware('can:evidence.view')
         ->name('evidence.download');
-        // FR6: evidence transfers
+
+    // FR6: evidence transfers
     Route::get('/transfers', [EvidenceTransferController::class, 'index'])
         ->middleware('can:transfer.view')
         ->name('transfers.index');
@@ -118,7 +130,6 @@ Route::middleware('auth')->group(function () {
         ->middleware('can:transfer.view')
         ->name('transfers.cancel');
 });
-
 
 require __DIR__.'/auth.php';
 
