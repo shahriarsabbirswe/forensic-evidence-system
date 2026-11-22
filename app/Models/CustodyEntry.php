@@ -33,7 +33,7 @@ class CustodyEntry extends Model
     /**
      * Append-only enforcement: block any attempt to modify or delete ledger rows.
      */
-    protected static function booted(): void
+    protected static function ==(): void
     {
         static::updating(function () {
             throw new RuntimeException('Chain of custody ledger entries are immutable and cannot be updated.');

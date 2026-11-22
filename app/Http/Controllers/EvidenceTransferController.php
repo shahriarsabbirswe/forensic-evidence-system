@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\CustodyLedgerService;
+
 /**
  * FR6: evidence transfer with supervisor approval and dual sign off.
  *
@@ -189,7 +190,7 @@ class EvidenceTransferController extends Controller
             ],
             // Runs inside the same database transaction, so the transfer and
             // the change of holder are saved together or not at all.
-           function (EvidenceTransfer $done) use ($user) {
+            function (EvidenceTransfer $done) use ($user) {
                 $evidence = $done->evidence;
                 $evidence->current_holder_id = $done->to_user_id;
                 $evidence->save();

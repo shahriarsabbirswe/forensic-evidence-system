@@ -60,6 +60,14 @@ class Evidence extends Model
         'status',
         'registered_by',
         'preservation_expires_at',
+
+        // Module 3: Retention, Archival & Disposal (FR12)
+        'lifecycle_status',
+        'retention_until',
+        'archived_at',
+        'disposed_at',
+        'disposal_approved_by',
+        'disposal_reason',
     ];
 
     protected function casts(): array
@@ -70,9 +78,13 @@ class Evidence extends Model
             'acquisition_started_at'   => 'datetime',
             'acquisition_completed_at' => 'datetime',
             'preservation_expires_at'  => 'date',
+            'retention_until'          => 'date',
+            'archived_at'              => 'datetime',
+            'disposed_at'              => 'datetime',
         ];
     }
-        protected static function booted(): void
+
+    protected static function booted(): void
     {
         // A new item is held by the person who registers it.
         static::creating(function (Evidence $evidence) {
@@ -97,18 +109,19 @@ class Evidence extends Model
     {
         return $this->transfers()->whereIn('status', EvidenceTransfer::IN_FLIGHT)->first();
     }
+
     public function custodyEntries(): HasMany
     {
         return $this->hasMany(CustodyEntry::class)
             ->orderBy('occurred_at')
             ->orderBy('id');
     }
+
     public function showUrl(): string
     {
         return route('evidence.show', $this);
     }
 
-    
     public function investigationCase(): BelongsTo
     {
         return $this->belongsTo(InvestigationCase::class);
@@ -131,6 +144,14 @@ class Evidence extends Model
     public function acquiredBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'acquired_by');
+    }
+
+    /**
+     * Officer/Admin who approved the disposal of this evidence (FR12).
+     */
+    public function disposalApprover(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'disposal_approved_by');
     }
 
     public function isDigital(): bool
