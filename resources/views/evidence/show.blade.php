@@ -16,7 +16,9 @@
             </div>
             <div class="flex gap-2">
                 @can('evidence.edit')
-                    <a href="{{ route('evidence.edit', $evidence) }}"
+                    
+<a href="{{ route('timeline.show', $evidence) }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 transition">Investigation Timeline</a>
+<a href="{{ route('evidence.edit', $evidence) }}"
                        class="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50">Edit</a>
                 @endcan
                 <a href="{{ route('cases.show', $evidence->investigationCase) }}"

@@ -70,6 +70,7 @@
                     @can('transfer.view')
                         <a href="{{ route('transfers.index') }}"
                            class="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">Transfers</a>
+<a href="{{ route('retention.index') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('retention.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">Retention & Lifecycle</a>
                     @endcan
                 </div>
             </div>
